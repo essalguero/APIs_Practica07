@@ -1,6 +1,6 @@
-#ifdef _MSC_VER
+/*#ifdef _MSC_VER
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#endif
+#endif*/
 
 
 #include <fstream>
@@ -80,21 +80,21 @@ void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange
 int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 {
 	// Load the model from file
-	std::shared_ptr<Mesh> modelMesh = Mesh::load("data/column.msh.xml");
+	std::shared_ptr<Mesh> suzanneModelMesh = Mesh::load("data/suzanne_refract.msh.xml");
 
-	if (modelMesh == nullptr)
+	if (suzanneModelMesh == nullptr)
 		return 0;
 
 	// Create model - Column
-	shared_ptr<Model> modelModel = make_shared<Model>(modelMesh);
-	modelModel->setScale(vec3(0.01f, 0.01f, 0.01f));
-	modelModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	shared_ptr<Model> suzanneModel = make_shared<Model>(suzanneModelMesh);
+	suzanneModel->setScale(vec3(3.0f, 3.0f, 3.0f));
+	suzanneModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Add model - Column
-	world.addEntity(modelModel);
+	world.addEntity(suzanneModel);
 
 	// Create fire emitter
-	std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
+	/*std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
 	Material fireMaterial = Material(fireTexture, State::defaultShader);
 	fireMaterial.setCulling(false);
 	fireMaterial.setLighting(false);
@@ -131,14 +131,14 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 	// Add both particle emitters
 	world.addEntity(smokeEmitter);
-	world.addEntity(fireEmitter);
+	world.addEntity(fireEmitter);*/
 
 	// Set Lighting
 	world.setAmbient(glm::vec3(0.1, 0.1, 0.1));
 	std::shared_ptr<Light>pointLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::POINT,
 		glm::vec3(.4f, .4f, .4f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	world.addEntity(pointLight);
+	//world.addEntity(pointLight);
 
 	return 1;
 }
