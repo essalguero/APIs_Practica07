@@ -1,6 +1,6 @@
-/*#ifdef _MSC_VER
+#ifdef _MSC_VER
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#endif*/
+#endif
 
 
 #include <fstream>
@@ -79,19 +79,49 @@ void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange
 // This method creates all the models and add them to the world
 int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 {
-	// Load the model from file
-	std::shared_ptr<Mesh> suzanneModelMesh = Mesh::load("data/suzanne_refract.msh.xml");
+	// Load Suzanne model from file
+	std::shared_ptr<Mesh> suzanneMesh = Mesh::load("data/suzanne_refract.msh.xml");
 
-	if (suzanneModelMesh == nullptr)
+	if (suzanneMesh == nullptr)
 		return 0;
 
-	// Create model - Column
-	shared_ptr<Model> suzanneModel = make_shared<Model>(suzanneModelMesh);
-	suzanneModel->setScale(vec3(3.0f, 3.0f, 3.0f));
-	suzanneModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+	// Create model
+	shared_ptr<Model> suzanneModel = make_shared<Model>(suzanneMesh);
+	suzanneModel->setScale(vec3(1.0f, 1.0f, 1.0f));
+	suzanneModel->setPosition(glm::vec3(-4.0f, 0.0f, 0.0f));
 
-	// Add model - Column
+	// Add model
 	world.addEntity(suzanneModel);
+
+
+	// Load Cube model from file
+	std::shared_ptr<Mesh>cubeMesh = Mesh::load("data/cube.msh.xml");
+
+	if (cubeMesh == nullptr)
+		return 0;
+
+	// Create model
+	shared_ptr<Model> cubeModel = make_shared<Model>(cubeMesh);
+	cubeModel->setScale(vec3(1.0f, 1.0f, 1.0f));
+	cubeModel->setPosition(glm::vec3(0.0f, 0.0f, -2.0f));
+
+	// Add model
+	world.addEntity(cubeModel);
+
+
+	// Load teapot model from file
+	std::shared_ptr<Mesh> teapotMesh = Mesh::load("data/teapot_reflect.msh.xml");
+
+	if (teapotMesh == nullptr)
+		return 0;
+
+	// Create model
+	shared_ptr<Model> teapotModel = make_shared<Model>(teapotMesh);
+	teapotModel->setScale(vec3(1.0f, 1.0f, 1.0f));
+	teapotModel->setPosition(glm::vec3(4.0f, 0.0f, 0.0f));
+
+	// Add model
+	world.addEntity(teapotModel);
 
 	// Create fire emitter
 	/*std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");
@@ -131,14 +161,14 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 	// Add both particle emitters
 	world.addEntity(smokeEmitter);
-	world.addEntity(fireEmitter);*/
+	world.addEntity(fireEmitter);
 
 	// Set Lighting
 	world.setAmbient(glm::vec3(0.1, 0.1, 0.1));
 	std::shared_ptr<Light>pointLight = std::make_shared<Light>(vec3(1.0f, 1.0f, 1.0f), Light::Type::POINT,
 		glm::vec3(.4f, .4f, .4f), 0.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	//world.addEntity(pointLight);
+	world.addEntity(pointLight);*/
 
 	return 1;
 }
@@ -259,9 +289,9 @@ int main(int, char**) {
 		//Camera rotation
 		camera->setPosition(glm::vec3(0, 0, 0));
 		angle += 32 * deltaTime;
-		camera->setRotation(glm::vec3(-20, angle, 0));
-		camera->move(glm::vec3(0, 0, 24));
-		camera->setPosition(glm::vec3(0, 6, 0) + camera->getPosition());
+		camera->setRotation(glm::vec3(0, angle, 0));
+		camera->move(glm::vec3(0, 0, 10));
+		camera->setPosition(camera->getPosition());
 
 
 		// Set projection matrix in case the screen has been resized
