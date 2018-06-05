@@ -3,6 +3,79 @@
 
 #include "common.h"
 
+std::shared_ptr<Texture> Texture::load(
+	const char* left, const char* right,
+	const char* front, const char* back,
+	const char* top, const char* bottom)
+{
+	//std::shared_ptr<Texture> texture;
+
+	int imageHeight;
+	int imageWidth;
+	GLuint textureId;
+
+	// Flip image as the image in files is stored in top/bottom order
+	// while OpenGL is expecting the file to be in bottom/up order
+	stbi_set_flip_vertically_on_load(true);
+
+	glGenTextures(1, &textureId);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+
+	/*glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);*/
+
+	stbi_uc* stbiImageLoaded = stbi_load(right, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+
+	stbiImageLoaded = stbi_load(left, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+	stbiImageLoaded = stbi_load(back, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+	stbiImageLoaded = stbi_load(front, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+	stbiImageLoaded = stbi_load(top, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+	stbiImageLoaded = stbi_load(bottom, &imageHeight, &imageWidth, nullptr, 4);
+
+	if (!stbiImageLoaded)
+		return nullptr;
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, imageWidth, imageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, stbiImageLoaded);
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+
+	std::shared_ptr<Texture> texture(new Texture(textureId, imageHeight, imageWidth), destroy);
+
+	stbi_image_free(stbiImageLoaded);
+
+	texture->isCubemap = true;
+
+	return texture;
+}
+
+bool Texture::isCube() const
+{
+	return isCubemap;
+}
+
 std::shared_ptr<Texture> Texture::load(const char* filename)
 {
 	//std::shared_ptr<Texture> texture;
@@ -38,6 +111,8 @@ std::shared_ptr<Texture> Texture::load(const char* filename)
 
 	stbi_image_free(stbiImageLoaded);
 
+	texture->isCubemap = false;
+
 	return texture;
 }
 
@@ -54,7 +129,16 @@ const glm::ivec2& Texture::getSize() const
 	return size;
 }
 
-void Texture::bind() const
+void Texture::bind(size_t layer) const
 {
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glActiveTexture(layer);
+
+	if (isCubemap)
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, textureId);
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, textureId);
+	}
 }

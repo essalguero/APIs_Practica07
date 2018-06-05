@@ -1,6 +1,6 @@
-#ifdef _MSC_VER
+/*#ifdef _MSC_VER
 #pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
-#endif
+#endif*/
 
 
 #include <fstream>
@@ -57,6 +57,7 @@ int init() {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_SCISSOR_TEST);
 	glEnable(GL_BLEND);
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); 
 	return 0;
 
 }
@@ -122,6 +123,20 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 	// Add model
 	world.addEntity(teapotModel);
+
+	// Load skybox model from file
+	std::shared_ptr<Mesh>skyboxMesh = Mesh::load("data/skybox.msh.xml");
+
+	if (skyboxMesh == nullptr)
+		return 0;
+
+	// Create model
+	shared_ptr<Model> skyboxModel = make_shared<Model>(skyboxMesh);
+	skyboxModel->setScale(vec3(20.0f, 20.0f, 20.0f));
+	skyboxModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	// Add model
+	world.addEntity(skyboxModel);
 
 	// Create fire emitter
 	/*std::shared_ptr<Texture> fireTexture = Texture::load("data/flame.png");

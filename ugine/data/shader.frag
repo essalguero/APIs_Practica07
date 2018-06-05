@@ -2,10 +2,17 @@ varying vec3 N;
 varying vec4 vertexObserver;
 
 varying vec2 fTexture;
+varying vec2 normalfTexture;
+
 uniform bool isTexturized;
 uniform bool hasColor;
 uniform sampler2D texSampler;
 uniform vec4 color;
+
+
+uniform sampler2D normalSampler;
+uniform sampler2D reflectSampler;
+uniform sampler2D refractSampler;
 
 const int MAX_LIGHTS = 8;
 

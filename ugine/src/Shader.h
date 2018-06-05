@@ -60,5 +60,8 @@ private:
 	int mvpMatrix;
 
 	int vnormalLoc;
+
+	int vtangentLoc;
+	//int normalvTextureLoc;
 };
 

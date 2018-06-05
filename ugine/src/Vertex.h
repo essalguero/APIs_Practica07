@@ -10,5 +10,7 @@ public:
 	glm::vec2 texture;
 
 	glm::vec3 normal;
+
+	glm::vec3 tangent;
 };
 

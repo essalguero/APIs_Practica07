@@ -75,7 +75,25 @@ void Material::prepare()
 
 			shader->setInt(textureLoc, 0);
 
-			materialTexture->bind();
+			if (materialTexture->isCube())
+			{
+				materialTexture->bind(5);
+			}
+			else
+			{
+				materialTexture->bind(0);
+
+				if (normalTexture)
+					normalTexture->bind(1);
+
+				if (reflectionTexture)
+					reflectionTexture->bind(2);
+
+				if (refractionTexture)
+					refractionTexture->bind(3);
+
+				blendingMode = Material::BlendMode::ALPHA;
+			}
 		}
 		else
 		{
@@ -192,4 +210,45 @@ bool Material::getDepthWrite() const
 void Material::setDepthWrite(bool enable)
 {
 	depthWrite = enable;
+}
+
+
+const std::shared_ptr<Texture>& Material::getReflectionTexture() const
+{
+	return reflectionTexture;
+}
+
+void Material::setReflectionTexture(const std::shared_ptr<Texture>& tex)
+{
+	reflectionTexture = tex;
+}
+
+const std::shared_ptr<Texture>& Material::getRefractionTexture() const
+{
+	return refractionTexture;
+}
+
+void Material::setRefractionTexture(const std::shared_ptr<Texture>& tex)
+{
+	refractionTexture = tex;
+}
+
+const std::shared_ptr<Texture>& Material::getNormalTexture() const
+{
+	return normalTexture;
+}
+
+void Material::setNormalTexture(const std::shared_ptr<Texture>& tex)
+{
+	normalTexture = tex;
+}
+
+float Material::getRefractionCoef() const
+{
+	return refractionCoef;
+}
+
+void Material::setRefractionCoef(float coef)
+{
+	refractionCoef = coef;
 }

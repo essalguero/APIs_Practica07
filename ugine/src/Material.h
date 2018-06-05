@@ -32,8 +32,26 @@ public:
 	void		setDepthWrite(bool enable);
 
 
+	const std::shared_ptr<Texture>& getReflectionTexture() const;
+	void setReflectionTexture(const std::shared_ptr<Texture>& tex);
+	const std::shared_ptr<Texture>& getRefractionTexture() const;
+	void setRefractionTexture(const std::shared_ptr<Texture>& tex);
+	const std::shared_ptr<Texture>& getNormalTexture() const;
+	void setNormalTexture(const std::shared_ptr<Texture>& tex);
+	float getRefractionCoef() const;
+	void setRefractionCoef(float coef);
+
+
 private:
 	std::shared_ptr<Texture> materialTexture;
+
+
+	std::shared_ptr<Texture> normalTexture;
+	std::shared_ptr<Texture> reflectionTexture;
+	std::shared_ptr<Texture> refractionTexture;
+
+	float refractionCoef;
+
 	std::shared_ptr<Shader> materialShader;
 
 	glm::vec4 materialColor;
