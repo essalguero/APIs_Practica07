@@ -62,6 +62,6 @@ private:
 	int vnormalLoc;
 
 	int vtangentLoc;
-	//int normalvTextureLoc;
+	int normalvTextureLoc;
 };
 
