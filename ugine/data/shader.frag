@@ -83,6 +83,8 @@ LightComponents calculateLight(int i)
 
 void main()
 {
+	//gl_FragColor = texture2D(normalSampler, normalfTexture); //vec4(normalfTexture.x, normalfTexture.y, 1, 1);
+	
 	vec4 diffuseComponent = vec4(0, 0, 0, 1);
 	vec4 specularComponent = vec4(0, 0, 0, 1);
 	LightComponents currentLight; 
@@ -117,7 +119,7 @@ void main()
 	{
 		if (isTexturized)
 		{
-			gl_FragColor = diffuse * texture2D(texSampler, fTexture);
+			gl_FragColor = diffuse * texture2D(texSampler, fTexture) * texture2D(normalSampler, normalfTexture);
 			//gl_FragColor = color;
 		}
 		else
@@ -125,13 +127,4 @@ void main()
 			gl_FragColor = color;
 		}
 	}
-
-	/*if (hasColor)
-	{
-		gl_FragColor = vec4(N, 1);
-	}
-	else
-	{
-		gl_FragColor = vec4(1.0);
-	}*/
 }
