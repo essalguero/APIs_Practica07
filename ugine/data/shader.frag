@@ -14,12 +14,16 @@ uniform sampler2D normalSampler;
 uniform sampler2D reflectSampler;
 uniform sampler2D refractSampler;
 
+uniform samplerCube cubeSampler;
+
 const int MAX_LIGHTS = 8;
 
 uniform int numberLights;
 uniform vec4 diffuse;
 uniform int shininess;
 uniform vec3 ambientLight;
+
+uniform bool isCubic;
 
 struct LightInfo                                                           
 {  
@@ -106,8 +110,15 @@ void main()
 		{
 			if (isTexturized)
 			{
-				gl_FragColor = (diffuseComponent * color * texture2D(texSampler, fTexture)) + specularComponent;
-				//gl_FragColor = color;
+				if (isCubic)
+				{
+					gl_FragColor = (diffuseComponent * color * textureCube(cubeSampler, N))  + specularComponent;
+				}
+				else
+				{
+					gl_FragColor = (diffuseComponent * color * texture2D(texSampler, fTexture)) + specularComponent;
+					//gl_FragColor = specularComponent;
+					}
 			}
 			else
 			{
@@ -119,8 +130,15 @@ void main()
 	{
 		if (isTexturized)
 		{
-			gl_FragColor = diffuse * texture2D(texSampler, fTexture) * texture2D(normalSampler, normalfTexture);
-			//gl_FragColor = color;
+			if (isCubic)
+			{
+				gl_FragColor = diffuse * color * textureCube(cubeSampler, N);
+			}
+			else
+			{
+				gl_FragColor = diffuse * color * texture2D(texSampler, fTexture) * texture2D(normalSampler, normalfTexture);
+				//gl_FragColor = color;
+			}
 		}
 		else
 		{

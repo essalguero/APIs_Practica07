@@ -88,6 +88,9 @@ Shader::Shader(string const & vertexShaderSource, const string & fragmentShaderS
 	vtangentLoc = glGetAttribLocation(id, "vtangent");
 
 	normalvTextureLoc = glGetAttribLocation(id, "normalvTexture");
+
+
+	isCubicLoc = glGetUniformLocation(id, "isCubicLoc");
 }
 
 

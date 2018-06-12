@@ -63,5 +63,7 @@ private:
 
 	int vtangentLoc;
 	int normalvTextureLoc;
+
+	int isCubicLoc;
 };
 
