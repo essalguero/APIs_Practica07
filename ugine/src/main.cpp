@@ -81,7 +81,7 @@ void configureEmitter(std::shared_ptr<Emitter>& emitter, glm::vec4 minColorRange
 int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 {
 	// Load Suzanne model from file
-	/*std::shared_ptr<Mesh> suzanneMesh = Mesh::load("data/suzanne_refract.msh.xml");
+	std::shared_ptr<Mesh> suzanneMesh = Mesh::load("data/suzanne_refract.msh.xml");
 
 	if (suzanneMesh == nullptr)
 		return 0;
@@ -110,7 +110,7 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 	world.addEntity(cubeModel);
 
 
-	// Load teapot model from file
+	/*// Load teapot model from file
 	std::shared_ptr<Mesh> teapotMesh = Mesh::load("data/teapot_reflect.msh.xml");
 
 	if (teapotMesh == nullptr)
@@ -132,7 +132,7 @@ int createModelsInWorld(World & world, std::vector<Emitter>& emittersVector)
 
 	// Create model
 	shared_ptr<Model> skyboxModel = make_shared<Model>(skyboxMesh);
-	skyboxModel->setScale(vec3(20.0f, 20.0f, 20.0f));
+	//skyboxModel->setScale(vec3(20.0f, 20.0f, 20.0f));
 	skyboxModel->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Add model

@@ -86,6 +86,8 @@ void Material::prepare()
 			{
 				shader->setInt(isCubicLoc, 0);
 
+				materialTexture->bind(0);
+
 				if (normalTexture)
 					normalTexture->bind(1);
 
@@ -94,8 +96,6 @@ void Material::prepare()
 
 				if (refractionTexture)
 					refractionTexture->bind(3);
-
-				materialTexture->bind(0);
 
 				blendingMode = Material::BlendMode::ALPHA;
 			}

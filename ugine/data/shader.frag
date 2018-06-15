@@ -93,56 +93,64 @@ void main()
 	vec4 specularComponent = vec4(0, 0, 0, 1);
 	LightComponents currentLight; 
 
-	if (numberLights > 0)
+	if (isCubic)
 	{
-		vec4 totalIlumination = vec4(0, 0, 0, 1.0);
-
-		for (int i = 0; i < numberLights; ++i)
+		//gl_FragColor = textureCube(cubeSampler, vertexObserver.xyww);
+		gl_FragColor = vec4(1.0, 1.0, 1.0, 0.5);
+	}
+	else
+	{
+		if (numberLights > 0)
 		{
-			currentLight = calculateLight(i);
-			
-			specularComponent += currentLight.specularComponent;
-			diffuseComponent += currentLight.diffuseComponent;
-			
-		}
+			vec4 totalIlumination = vec4(0, 0, 0, 1.0);
 
-		if (hasColor)
+			for (int i = 0; i < numberLights; ++i)
+			{
+				currentLight = calculateLight(i);
+			
+				specularComponent += currentLight.specularComponent;
+				diffuseComponent += currentLight.diffuseComponent;
+			
+			}
+
+			if (hasColor)
+			{
+				if (isTexturized)
+				{
+					if (isCubic)
+					{
+						gl_FragColor = (diffuseComponent * color * textureCube(cubeSampler, N))  + specularComponent;
+					}
+					else
+					{
+						gl_FragColor = (diffuseComponent * color * texture2D(texSampler, fTexture)) + specularComponent;
+						//gl_FragColor = specularComponent;
+						}
+				}
+				else
+				{
+					gl_FragColor = (diffuseComponent * color) + specularComponent;
+				}
+			}
+		}
+		else
 		{
 			if (isTexturized)
 			{
 				if (isCubic)
 				{
-					gl_FragColor = (diffuseComponent * color * textureCube(cubeSampler, N))  + specularComponent;
+					gl_FragColor = diffuse * color * textureCube(cubeSampler, N);
 				}
 				else
 				{
-					gl_FragColor = (diffuseComponent * color * texture2D(texSampler, fTexture)) + specularComponent;
-					//gl_FragColor = specularComponent;
-					}
+					gl_FragColor = diffuse * color * texture2D(texSampler, fTexture) * texture2D(normalSampler, normalfTexture);
+					//gl_FragColor = color;
+				}
 			}
 			else
 			{
-				gl_FragColor = (diffuseComponent * color) + specularComponent;
+				gl_FragColor = color;
 			}
-		}
-	}
-	else
-	{
-		if (isTexturized)
-		{
-			if (isCubic)
-			{
-				gl_FragColor = diffuse * color * textureCube(cubeSampler, N);
-			}
-			else
-			{
-				gl_FragColor = diffuse * color * texture2D(texSampler, fTexture) * texture2D(normalSampler, normalfTexture);
-				//gl_FragColor = color;
-			}
-		}
-		else
-		{
-			gl_FragColor = color;
 		}
 	}
 }
