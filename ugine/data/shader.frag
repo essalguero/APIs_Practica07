@@ -1,6 +1,7 @@
 varying vec3 N;
 varying vec4 vertexObserver;
 
+varying vec3 fpos;
 varying vec2 fTexture;
 varying vec2 normalfTexture;
 
@@ -95,8 +96,8 @@ void main()
 
 	if (isCubic)
 	{
-		//gl_FragColor = textureCube(cubeSampler, vertexObserver.xyww);
-		gl_FragColor = vec4(1.0, 1.0, 1.0, 0.5);
+		//gl_FragColor = textureCube(cubeSampler, fpos);
+		gl_FragColor = vec4(fpos, 1) *  vec4(1.0, 1.0, 1.0, 0.5);
 	}
 	else
 	{

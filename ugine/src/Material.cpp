@@ -51,6 +51,8 @@ void Material::prepare()
 	glm::mat4 mvMatrix = State::viewMatrix * State::modelMatrix;
 	glm::mat4 mvpMatrix = State::projectionMatrix * mvMatrix;
 
+	glm::mat4 vpMatrix = State::projectionMatrix * State::viewMatrix;
+
 	glm::mat4 normalsMatrix(mvMatrix);
 	normalsMatrix = glm::transpose(glm::inverse(normalsMatrix));
 
@@ -76,15 +78,21 @@ void Material::prepare()
 			shader->setInt(textureLoc, 0);
 
 			int isCubicLoc = getShader()->getLocation("isCubic");
+			int isCubic2Loc = getShader()->getLocation("isCubemap");
+			
 
 			if (materialTexture->isCube())
 			{
 				shader->setInt(isCubicLoc, 1);
+				shader->setInt(isCubic2Loc, 1);
 				materialTexture->bind(5);
+
+				shader->setMatrix(shader->getLocation("vpMatrix"), vpMatrix);
 			}
 			else
 			{
 				shader->setInt(isCubicLoc, 0);
+				shader->setInt(isCubic2Loc, 0);
 
 				materialTexture->bind(0);
 
